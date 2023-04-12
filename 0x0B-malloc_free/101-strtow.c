@@ -1,48 +1,50 @@
-#include "main.h"
 #include <stdlib.h>
-
-int word_len(char *str);
-int count_words(char *str);
-char **strtow(char *str);
+#include "main.h"
 
 /**
- * word_len - Function locates the index marking the end of the
- *            first word contained within a string.
- * @str: The string to be searched.
+ * count_word - helper function to count the number of words in a string
+ * @s: string to evaluate
  *
- * Return: The index marking the end of the initial word pointed to by str.
+ * Return: number of words
  */
-int word_len(char *str)
+int count_word(char *s)
 {
-	int index = 0, len = 0;
+	int flag, c, w;
 
-	while (*(str + index) && *(str + index) != ' ')
+	flag = 0;
+	w = 0;
+
+	for (c = 0; s[c] != '\0'; c++)
 	{
-		len++;
-		index++;
+		if (s[c] == ' ')
+			flag = 0;
+		else if (flag == 0)
+		{
+			flag = 1;
+			w++;
+		}
 	}
 
-	return (len);
+	return (w);
 }
-
 /**
- * count_words - To counts the number of words contained within a string.
- * @str: The string to be searched.
+ * **strtow - splits a string into words
+ * @str: string to split
  *
- * Return: The number of words contained within str.
+ * Return: pointer to an array of strings (Success)
+ * or NULL (Error)
  */
-int count_words(char *str)
+char **strtow(char *str)
 {
-	int index = 0, words = 0, len = 0;
+	char **matrix, *tmp;
+	int i, k = 0, len = 0, words, c = 0, start, end;
 
-	for (index = 0; *(str + index); index++)
+	while (*(str + len))
 		len++;
+	words = count_word(str);
+	if (words == 0)
+		return (NULL);
 
-	for (index = 0; index < len; index++)
-	{
-		if (*(str + index) != ' ')
-		{
-			words++;
-			index += word_len(str + index);
-		}
+	matrix = (char **) malloc(sizeof(char *) * (words + 1));
+	if (matrix == NULL)
 
