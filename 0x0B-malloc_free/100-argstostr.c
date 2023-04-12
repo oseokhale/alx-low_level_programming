@@ -1,26 +1,45 @@
 #include "main.h"
 #include <stdlib.h>
+#include <stdio.h>
 
 /**
- * argstostr - Function concatenates all arguments of the program into a str;
- *             arguments are separated by a new line in the string.
- * @ac: The number of arguments passed to the program.
- * @av: An array of pointers to the arguments.
- *
- * Return: If ac == 0, av == NULL, or the function fails - NULL.
- *         Otherwise - a pointer to the new string.
+ * argstostr - concatenate all arguments of your program
+ * @ac: argument count
+ * @av: double pointer to array of strings passed to main
+ * Return: Null if fail, else return pointer to new string
  */
+
 char *argstostr(int ac, char **av)
 {
-	char *str;
-	int arg, byte, index, size = ac;
+	char *a, *retp;
+	int i, j, total;
 
 	if (ac == 0 || av == NULL)
 		return (NULL);
 
-	for (arg = 0; arg < ac; arg++)
+	for (i = 0, total = 0; i < ac; i++)
 	{
-		for (byte = 0; av[arg][byte]; byte++)
-			size++;
+		for (j = 0; *(*(av + i) + j) != '\0'; j++, total++)
+			;
+		total++;
+	}
+	total++;
+
+	a = malloc(total * sizeof(char));
+	if (a == NULL)
+		return (NULL);
+
+	retp = a;
+	for (i = 0; i < ac; i++)
+	{
+		for (j = 0; av[i][j] != '\0'; j++)
+		{
+			*a = av[i][j];
+			a++;
+		}
+		*a = '\n';
+		a++;
 	}
 
+	return (retp);
+}
